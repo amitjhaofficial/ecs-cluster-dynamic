@@ -1,4 +1,4 @@
-region             = "eu-west-2"
+region             = "us-east-1"
 vpc_id             = "vpc-0d8e866f73db7e7dd"
 
 public_subnet_ids  = [
@@ -70,7 +70,6 @@ services_config = {
     port   = 80
   }
 }
-
 ecs_services = [
   {
     name           = "events-service"
@@ -83,118 +82,6 @@ ecs_services = [
     autoscale_max  = 1
     priority       = 1
     path           = "/events-service"
-    cluster        = "internal-cluster"
-    alb            = "int-alb"
-  },
-  {
-    name           = "network-service"
-    image          = "nginx:latest"
-    cpu            = "256"
-    memory         = "512"
-    container_port = 8080
-    desired_count  = 1
-    autoscale_min  = 1
-    autoscale_max  = 1
-    priority       = 2
-    path           = "/network-service"
-    cluster        = "internal-cluster"
-    alb            = "int-alb"
-  },
-  {
-    name           = "email-service"
-    image          = "nginx:latest"
-    cpu            = "256"
-    memory         = "512"
-    container_port = 5001
-    desired_count  = 1
-    autoscale_min  = 1
-    autoscale_max  = 1
-    priority       = 3
-    path           = "/email-service"
-    cluster        = "internal-cluster"
-    alb            = "int-alb"
-  },
-  {
-    name           = "user-profile-service"
-    image          = "nginx:latest"
-    cpu            = "256"
-    memory         = "512"
-    container_port = 8080
-    desired_count  = 1
-    autoscale_min  = 1
-    autoscale_max  = 1
-    priority       = 4
-    path           = "/profile-service"
-    cluster        = "internal-cluster"
-    alb            = "int-alb"
-  },
-  {
-    name           = "security-service"
-    image          = "nginx:latest"
-    cpu            = "256"
-    memory         = "512"
-    container_port = 8080
-    desired_count  = 1
-    autoscale_min  = 1
-    autoscale_max  = 1
-    priority       = 5
-    path           = "/security-service"
-    cluster        = "internal-cluster"
-    alb            = "int-alb"
-  },
-  {
-    name           = "messaging-service"
-    image          = "nginx:latest"
-    cpu            = "256"
-    memory         = "512"
-    container_port = 8080
-    desired_count  = 0
-    autoscale_min  = 1
-    autoscale_max  = 1
-    priority       = 6
-    path           = "/message-service"
-    cluster        = "internal-cluster"
-    alb            = "int-alb"
-  },
-  {
-    name           = "static-data-service"
-    image          = "nginx:latest"
-    cpu            = "256"
-    memory         = "512"
-    container_port = 8080
-    desired_count  = 1
-    autoscale_min  = 1
-    autoscale_max  = 1
-    priority       = 7
-    path           = "/static-data-service"
-    cluster        = "internal-cluster"
-    alb            = "int-alb"
-  },
-  {
-    name           = "post-service"
-    image          = "nginx:latest"
-    cpu            = "256"
-    memory         = "512"
-    container_port = 8080
-    desired_count  = 0
-    autoscale_min  = 1
-    autoscale_max  = 1
-    priority       = 8
-    path           = "/post-service"
-    cluster        = "internal-cluster"
-    alb            = "int-alb"
-  },
-  {
-    name           = "activity-service"
-    image          = "nginx:latest"
-    cpu            = "256"
-    memory         = "512"
-    container_port = 8080
-    desired_count  = 0
-    autoscale_min  = 1
-    autoscale_max  = 1
-    priority       = 9
-    path           = "/activity-service"
     cluster        = "internal-cluster"
     alb            = "int-alb"
   },
@@ -212,4 +99,5 @@ ecs_services = [
     cluster        = "external-cluster"
     alb            = "external-alb"
   }
+  # ... Add more services as needed
 ]
