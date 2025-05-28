@@ -154,10 +154,10 @@ resource "aws_ecs_task_definition" "tasks" {
 }
 
 resource "aws_ecs_service" "nginx_service" {
-  for_each        = local.service_map
+  for_each = local.service_map
 
   name            = each.key
-  cluster = aws_ecs_cluster.ecs_clusters[each.value.cluster].id
+  cluster         = aws_ecs_cluster.ecs_clusters[each.value.cluster].id
   task_definition = aws_ecs_task_definition.tasks[each.key].arn
   launch_type     = "FARGATE"
   desired_count   = each.value.desired_count
@@ -174,8 +174,11 @@ resource "aws_ecs_service" "nginx_service" {
     container_port   = each.value.container_port
   }
 
-  depends_on = [aws_lb_listener.http]
+  depends_on = [
+    aws_lb_listener_rule.routing
+  ]
 }
+
 
 resource "aws_lb_listener_rule" "routing" {
   for_each     = local.services_map
@@ -187,11 +190,21 @@ resource "aws_lb_listener_rule" "routing" {
     target_group_arn = aws_lb_target_group.tg[each.key].arn
   }
 
-  condition {
-    host_header {
-      values = [local.service_map[each.key].host != null ? local.service_map[each.key].host : "*"]
+  dynamic "condition" {
+    for_each = local.service_map[each.key].host != null ? [1] : []
+    content {
+      host_header {
+        values = [local.service_map[each.key].host]
+      }
+    }
+  }
+
+  dynamic "condition" {
+    for_each = local.service_map[each.key].host == null ? [1] : []
+    content {
+      path_pattern {
+        values = [local.service_map[each.key].path]
+      }
     }
   }
 }
-
-
